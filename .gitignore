@@ -1,0 +1,16 @@
+*.o
+*.a
+*.elf
+*.hex
+.deps
+
+/MiniProject/MiniProject.vcxproj
+/MiniProject/MiniProject.vcxproj.filters
+/MiniProject/MiniProject.vcxproj.user
+/MiniProject/x64
+/MiniProject/pic32mx.h
+
+.git
+.vs
+x64
+MiniProject.sln

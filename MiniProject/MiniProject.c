@@ -1,8 +1,11 @@
 #include "pic32mx.h"
+//#include <stdio.h>
 
 int main() {
 
-	printf("works");
 
+	while (1) {
+	
+	}
 	return 0;
 }
