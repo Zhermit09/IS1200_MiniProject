@@ -240,6 +240,7 @@ _gen_exception:
 
 .end _gen_exception
 
+.align 4
 .global enable_interrupts
 	enable_interrupts:
 		ei

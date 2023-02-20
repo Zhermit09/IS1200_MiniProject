@@ -1,20 +1,37 @@
-#pragma once
+#ifndef _IO_
+#define _IO_
+
 #include "pic32mx.h"
 
-int getsw(void) {
+//Value must be in the (0, 0.2] seconds range
+#define	T_PERIOD 0.1
 
-	return ((PORTD >> 8) & 0xf);
-}
+//256, 64, 32, 16, 8, 4, 2, 1 Only
+#define T_PRESCALE 256
+#define T_PERIOD_VALUE (T_PERIOD * 80000000 / T_PRESCALE)
 
-int getbtns(void) {
-	return (((PORTD >> 4) & 0xe) | ((PORTF >> 1) & 0x1));	//Button 4-2 + 1
-}
+#ifdef T_PRESCALE
+#if T_PRESCALE == 256
+#define T_PRESCALE_VALUE (7<<4);
+#elif T_PRESCALE == 64
+#define T_PRESCALE_VALUE (6<<4);
+#elif T_PRESCALE == 32
+#define T_PRESCALE_VALUE (5<<4);
+#elif T_PRESCALE == 16
+#define T_PRESCALE_VALUE (4<<4);
+#elif T_PRESCALE == 8
+#define T_PRESCALE_VALUE (3<<4);
+#elif T_PRESCALE == 4
+#define T_PRESCALE_VALUE (2<<4);
+#elif T_PRESCALE == 2
+#define T_PRESCALE_VALUE (1<<4);
+#elif T_PRESCALE == 1
+#define T_PRESCALE_VALUE 0;
+#endif
+#endif
 
-//Debug LEDs
-//PORTE = (PORTE & ~0xff) | (getbtns() << 4) | getsw();
+void delay(int ms);
+int getSw(void);
+int getBtns(void);
 
-/*
-if (IFS(0) & 0x100) {
-	PORTE = ~PORTE;
-	IFSCLR(0) = 0x100;
-}*/
+#endif // end of _IO_

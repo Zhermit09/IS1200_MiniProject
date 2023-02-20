@@ -1,16 +1,18 @@
 #include "pic32mx.h"
 
+extern int delayAmount;
 int i = 0;
 
 void ISR() {
 
 	if (IFS(0) & 0x100) {
 
-		if (i == 10) {
-			PORTE = ~PORTE;
-			i = 0;
+		//PORTE = ~PORTE;
+
+		if (delayAmount > 0) {
+			delayAmount--;
 		}
-		i++;
+
 		IFSCLR(0) = 0x100;
 	}
 }
