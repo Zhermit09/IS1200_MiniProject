@@ -2,8 +2,23 @@
 #define _IO_
 
 #include "pic32mx.h"
+#include <stdint.h>
 
-//Value must be in the (0, 0.2] seconds range
+#define _ 0
+
+#define CMD_MODE_ON PORTFCLR = 1 << 4
+#define CMD_MODE_OFF PORTFSET = 1 << 4
+
+#define DISPLAY_VDD_ON PORTFCLR = 1 << 6
+#define DISPLAY_VDD_OFF PORTFSET = 1 << 6
+
+#define DISPLAY_RESET_ON PORTGCLR = 1 << 9
+#define DISPLAY_RESET_OFF PORTGSET = 1 << 9
+
+#define DISPLAY_VBATT_ON PORTFCLR = 1 << 5
+#define DISPLAY_VBATT_OFF PORTFSET = 1 << 5
+
+//Value must be in the (0, 0.2] seconds range with 256 prescale
 #define	T_PERIOD 0.1
 
 //256, 64, 32, 16, 8, 4, 2, 1 Only
@@ -30,8 +45,22 @@
 #endif
 #endif
 
+uint8_t canvas[32][128];
+
+struct vec;
+struct Sprite;
+
+enum Align;
+enum Border;
+enum Invert;
+
 void delay(int ms);
 int getSw(void);
 int getBtns(void);
+
+uint8_t spi(uint8_t data);
+void displayUpdate(uint8_t matrix[32][128]);
+void printText(char* string, struct vec pos, struct vec scale, enum Align align, enum Border border, enum Invert invert);
+void drawSprite(struct Sprite* asset, struct vec pos, struct vec scale);
 
 #endif // end of _IO_

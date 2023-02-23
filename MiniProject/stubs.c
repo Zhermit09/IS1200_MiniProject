@@ -1,10 +1,10 @@
 #include "pic32mx.h"
 #include "io.h"
 
-extern void enable_interrupts(void);//{};
+extern void enable_interrupts(void);// {};
 
 void initLed() {
-	TRISECLR = 0xff;						//Led out
+	TRISECLR = 0xff;					//Led out
 	PORTE = 0;
 }
 
@@ -26,6 +26,35 @@ void initTimer() {
 	T2CON = 0x8000 | T_PRESCALE_VALUE;	//Start timer / prescale
 }
 
+void preDisplayInit() {
+	//Set up peripheral bus clock
+	OSCCONCLR = 0x180000;
+	OSCCONSET = 0x080000;
+
+	//Set up output pins
+	AD1PCFG = 0xFFFF;
+	ODCE = 0x0;
+
+	//Output pins for display signals
+	ODCF = 0x0;
+	ODCG = 0x0;
+
+	//Display output control pins
+	TRISFCLR = 7 << 4;
+	TRISGCLR = 1 << 9;
+
+	//Display intput pins?
+	TRISDSET = 1 << 8;
+
+	//Set up SPI as master
+	SPI2CON = 0;
+	SPI2BRG = 1 << 2;
+
+	SPI2STATCLR = 1 << 6;				//Clear SPIROV
+	SPI2CONSET = 0x8060;				//Turn on SPI, Set CKP = 1, MSTEN = 1
+}
+
+
 /* Non-Maskable Interrupt; something bad likely happened, so hang */
 void _nmi_handler() {
 	for(;;);
@@ -44,4 +73,6 @@ void _on_bootstrap() {
 	initTimer();
 	
 	enable_interrupts();
+
+	preDisplayInit();
 }
