@@ -47,20 +47,30 @@
 
 uint8_t canvas[32][128];
 
-struct vec;
-struct Sprite;
+typedef struct Vec {
+	int x;
+	int y;
+}vec;
 
-enum Align;
-enum Border;
-enum Invert;
+typedef struct Sprite {
+	int height;
+	int width;
+	uint8_t *sprite;
+}sprite;
+
+enum Align { NO_ALIGN, LEFT, X_CENTER, Y_CENTER, CENTER, RIGHT };
+enum Border { NO_BORDER, BORDER };
+enum Invert { NO_INVERT, INVERT };
 
 void delay(int ms);
 int getSw(void);
 int getBtns(void);
 
 uint8_t spi(uint8_t data);
-void displayUpdate(uint8_t matrix[32][128]);
-void printText(char* string, struct vec pos, struct vec scale, enum Align align, enum Border border, enum Invert invert);
-void drawSprite(struct Sprite* asset, struct vec pos, struct vec scale);
+void displayUpdate();
+void printText(char* string, struct Vec pos, struct Vec scale, enum Align align, enum Border border, enum Invert invert);
+void drawSprite(struct Sprite asset, struct Vec pos, struct Vec scale);
+
+void fontInit();
 
 #endif // end of _IO_

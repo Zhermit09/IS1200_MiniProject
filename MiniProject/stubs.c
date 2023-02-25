@@ -28,8 +28,8 @@ void initTimer() {
 
 void preDisplayInit() {
 	//Set up peripheral bus clock
-	OSCCONCLR = 0x180000;
-	OSCCONSET = 0x080000;
+	OSCCONCLR = 0x180000;				//Peripheral bus clock scaling Max 10Mhz
+	OSCCONSET = 0x080000;				//1:1, 1:2, 1:4, 1:8	sysclk ti pbclk (bits 20-19)
 
 	//Set up output pins
 	AD1PCFG = 0xFFFF;

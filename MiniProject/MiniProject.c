@@ -1,5 +1,7 @@
 #include "pic32mx.h"
 #include "io.h"
+//#include <stdio.h>
+
 
 void displayInit() {
 	CMD_MODE_ON;
@@ -34,11 +36,14 @@ void displayInit() {
 
 int main() {
 	displayInit();
+	fontInit();
 
+	PORTE = 1;
+		
 	while (1) {
-		//PORTE = ~PORTE;		
-		displayUpdate(canvas);
-	
+
+		displayUpdate();
+
 	}
 	return 0;
 }
