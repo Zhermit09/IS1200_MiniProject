@@ -40,20 +40,25 @@ void printMenu(int menuOption) {
 	displayUpdate();
 }
 
+char initials[4][3] = { "___", "___", "___", "AAA" };
+int highscores[3] = { 0 };
+
 void highscore() {
 	ClearDisplay;
-	printText("Highscore", pos(51, 3), scale(1, 1));
+	printText("Highscore", pos(51, 1), scale(1, 1));
+	printText(initials[0], pos(57, 7), scale(1, 1));
+	printText(initials[1], pos(57, 14), scale(1, 1));
+	printText(initials[2], pos(57, 21), scale(1, 1));
+	Iprint(highscores[0], pos(77, 12), scale(1, 1));
+	Iprint(highscores[1], pos(77, 19), scale(1, 1));
+	Iprint(highscores[2], pos(77, 26), scale(1, 1));
 	displayUpdate();
 	while (1) {                     // Retur alternativ till menu (1 knapp)
 		if ((getBtns() & 1) == 1) {
 			break;
 		}
 	}
-
-
-	// Laddar upp tre senaste highscores
 }
-
 void controls() {
 	ClearDisplay;
 	printText("Controls", pos(52, 3), scale(1, 1));

@@ -1,6 +1,6 @@
 #include "pic32mx.h"
 #include "io.h"
-//#include <stdio.h>
+#include <stdio.h>
 
 int delayAmount = 0;
 int64_t timer = 0;
@@ -45,7 +45,7 @@ uint8_t clear[32][128] = { 0 };
 struct Sprite blank = { 32,128,&clear[0][0] };
 
 
-struct Sprite fontz[95];
+//struct Sprite fontz[95];
 
 uint8_t f6x3[][6][3] =
 {
@@ -1064,7 +1064,60 @@ void printText(char* string, struct Vec pos, struct Vec scale) {
 
 }
 
-void digitToChar(int num, int x, int offset, char* buffer) {
+int itoa(int i, char string[]) {
+	int d = 0;
+	char temp;
+
+	if (i == 0) {
+		d++;
+		string[0] = '0';
+	}
+
+	while (i)
+	{
+		string[d] = (i % 10) + '0';
+		i /= 10;
+		d++;
+
+	}
+
+	int j;
+	for (j = 0; j < d / 2; j++) {
+		temp = string[j];
+		string[j] = string[d - j - 1];
+		string[d - j - 1] = temp;
+	}
+
+	return d;
+}
+
+void ftoa(float f, char string[]) {
+	int ipart = (int)f;
+	float fpart = f - ipart;
+	int d;
+
+	d = itoa(ipart, string);
+	ipart = (int)((fpart+0.005) * 100);
+	if (ipart) {
+		string[d] = '.';
+		itoa(ipart, string + d + 1);
+	}
+
+}
+
+void Iprint(int i, struct Vec pos, struct Vec scale) {
+	char string[20] = { 0 };
+	itoa(i, string);
+	printText(string, pos, scale);
+}
+
+void Fprint(float f, struct Vec pos, struct Vec scale) {
+	char string[20] = { 0 };
+	ftoa(f, string);
+	printText(string, pos, scale);
+}
+
+/*void digitToChar(int num, int x, int offset, char* buffer) {
 	int temp;
 	int divide;
 	int rem;
@@ -1085,9 +1138,10 @@ void digitToChar(int num, int x, int offset, char* buffer) {
 }
 
 void printNum(float num, struct Vec pos, struct Vec scale) {
-
-	char string[9] = { 0 };
-
+	char string[20] = { 0 };
+	sprintf_s(string, 20, "%f", num);
+	//printf(string);
+	printText(string, pos, scale);
 	int temp = (int)num;
 	int digits = 0;
 
@@ -1110,3 +1164,4 @@ void printNum(float num, struct Vec pos, struct Vec scale) {
 
 	printText(string, pos, scale);
 }
+*/

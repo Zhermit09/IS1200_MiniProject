@@ -71,6 +71,7 @@ enum Invert { NO_INVERT, INVERT };*/
 
 uint8_t canvas[32][128];
 struct Sprite blank;
+struct Sprite fontz[95];
 
 void startTimer();
 float stopTimer();
@@ -82,8 +83,10 @@ int getBtns(void);
 uint8_t spi(uint8_t data);
 void displayUpdate();
 void printText(char* string, struct Vec pos, struct Vec scale);
-void printNum(float num, struct Vec pos, struct Vec scale);
 void drawSprite(struct Sprite asset, struct Vec pos, struct Vec scale);
+
+void Iprint(int i, struct Vec pos, struct Vec scale);
+void Fprint(float f, struct Vec pos, struct Vec scale);
 
 void fontInit();
 #endif // end of _IO_

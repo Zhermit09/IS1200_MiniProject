@@ -78,7 +78,6 @@ void displayInit() {
 
 
 int main() {
-
 	startTimer();
 	displayInit();
 	fontInit();
@@ -89,6 +88,7 @@ int main() {
 	{
 		if (gameON) {
 			game();
+			scoreCheck(10);
 			gameOver();
 		}
 		else {

@@ -4,6 +4,7 @@
 #define bWidth 4
 #define pos(x,y) (struct Vec){x,y}
 #define scale(x,y) (struct Vec){x,y}
+#define sWidth(x) fontz[(int)(x - 32)].width
 
 extern gameON;
 const float g = 9.82f;
@@ -65,7 +66,7 @@ void movePipe(struct Pipe pipe) {
 }
 
 void UI() {
-	printNum((float)rand(), pos(50, 10), scale(1, 1));
+	Fprint((float)rand(), pos(50, 10), scale(1, 1));
 
 	/*printText(" !\"#$%&\'()*+,-./0123456789:;<=>?", pos, scale, NO_ALIGN, NO_BORDER, NO_INVERT);
 	pos.y += 6;
@@ -109,4 +110,116 @@ void game() {
 		}
 	}
 
+}
+
+extern char initials[4][3];
+extern int highscores[3];
+int hsMenuOption = 0;
+
+void highscoreUpdate(int count) {
+	int i;
+	int j;
+
+	for (i = 2; i > count; i--)
+	{
+		for (j = 0; j < 3; j++) {
+			initials[i][j] = initials[i - 1][j];
+		}
+	}
+
+	ClearDisplay;
+	struct Vec p = pos(47, 10);
+	printText(initials[3], p, scale(1, 1));
+
+	/*for (i = 0; i < 3; i++) {
+		printText(initials[3][i], p, scale(1, 1));
+		p.x += fontz[(int)(initials[3][i] - 32)].width+1;
+
+	}*/
+	displayUpdate();
+
+	int updating = 1;
+
+	while (updating)
+	{
+		ClearDisplay;
+		delay(100);
+
+		if ((getBtns() & 8) == 8) {
+			hsMenuOption++;
+			if (hsMenuOption > 2)
+			{
+				hsMenuOption = 0;
+			}
+			printText(initials[3], p, scale(1, 1));
+			switch (hsMenuOption) {
+			case 0:
+				printText("^", pos(p.x - (5 - sWidth(initials[3][0]))/2, p.y + 6), scale(1, 1));
+				break;
+			case 1:
+				printText("^", pos(p.x + 1 + sWidth(initials[3][0]) - (5 - sWidth(initials[3][1]))/2, p.y + 6), scale(1, 1));
+				break;
+			case 2:
+				printText("^", pos(p.x + 2 + sWidth(initials[3][0]) + sWidth(initials[3][1]) - (5 - sWidth(initials[3][2]))/2, p.y + 6), scale(1, 1));
+				break;
+			default:
+				break;
+			}
+			displayUpdate();
+		}
+		if ((getBtns() & 4) == 4) {
+			initials[3][hsMenuOption]++;
+
+			if (initials[3][hsMenuOption] > 90)
+			{
+				initials[3][hsMenuOption] = 65;
+			}
+
+			printText(initials[3], p, scale(1, 1));
+
+			switch (hsMenuOption) {
+			case 0:
+				printText("^", pos(p.x - (5 - sWidth(initials[3][0])), p.y + 6), scale(1, 1));
+				break;
+			case 1:
+				printText("^", pos(p.x + sWidth(initials[3][0]) - (5 - sWidth(initials[3][1])), p.y + 6), scale(1, 1));
+				break;
+			case 2:
+				printText("^", pos(p.x + sWidth(initials[3][0]) + sWidth(initials[3][1]) - (5 - sWidth(initials[3][2])), p.y + 6), scale(1, 1));
+				break;
+			default:
+				break;
+			}
+			/*for (i = 0; i < 3; i++) {
+				p.x += fontz[(int)(initials[3][i] - 32)].width + 1;
+
+			}*/
+			displayUpdate();
+		}
+		if ((getBtns() & 2) == 2) {
+			updating = 0;
+		}
+	}
+
+}
+
+void scoreCheck(int score) {
+	if (score > highscores[0])
+	{
+		highscores[2] = highscores[1];
+		highscores[1] = highscores[0];
+		highscores[0] = score;
+		highscoreUpdate(0);
+	}
+	else if (score > highscores[1])
+	{
+		highscores[2] = highscores[1];
+		highscores[1] = score;
+		highscoreUpdate(1);
+	}
+	else if (score > highscores[2])
+	{
+		highscores[2] = score;
+		highscoreUpdate(2);
+	}
 }

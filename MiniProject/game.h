@@ -21,4 +21,5 @@ struct Bird bird;
 
 void gameSetup();
 void game();
+void scoreCheck(int score);
 #endif // end of _GAME_
