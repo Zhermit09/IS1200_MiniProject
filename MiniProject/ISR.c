@@ -1,5 +1,6 @@
 #include "pic32mx.h"
 #include <stdint.h>
+#include "io.h"
 
 extern int delayAmount;
 extern int64_t timer;
@@ -15,6 +16,7 @@ void ISR() {
 		}
 
 		timer++;
+		PORTE = getBtns();
 
 		IFSCLR(0) = 0x100;
 	}

@@ -3,33 +3,35 @@
 #include "menu.h"
 #include "game.h"
 
+extern gameON;
+
 
 void printMenu(int menuOption) {
-
+	ClearDisplay;
 	switch (menuOption) {
 	case 1:
-		printText("Play", pos(1, 5), scale(1, 1), CENTER, BORDER, INVERT);
-		printText("Highscore", pos(1, 12), scale(1, 1), CENTER, BORDER, NO_INVERT);
-		printText("Controls", pos(1, 19), scale(1, 1), CENTER, BORDER, NO_INVERT);
-		printText("Credits", pos(1, 26), scale(1, 1), CENTER, BORDER, NO_INVERT);
+		printText("-> Play", pos(47, 5), scale(1, 1));
+		printText("Highscore", pos(51, 12), scale(1, 1));
+		printText("Controls", pos(52, 19), scale(1, 1));
+		printText("Credits", pos(54, 26), scale(1, 1));
 		break;
 	case 2:
-		printText("Play", pos(1, 5), scale(1, 1), CENTER, BORDER, NO_INVERT);
-		printText("Highscore", pos(1, 12), scale(1, 1), CENTER, BORDER, INVERT);
-		printText("Controls", pos(1, 19), scale(1, 1), CENTER, BORDER, NO_INVERT);
-		printText("Credits", pos(1, 26), scale(1, 1), CENTER, BORDER, NO_INVERT);
+		printText("Play", pos(58, 5), scale(1, 1));
+		printText("-> Highscore", pos(40, 12), scale(1, 1));
+		printText("Controls", pos(52, 19), scale(1, 1));
+		printText("Credits", pos(54, 26), scale(1, 1));
 		break;
 	case 3:
-		printText("Play", pos(1, 5), scale(1, 1), CENTER, BORDER, NO_INVERT);
-		printText("Highscore", pos(1, 12), scale(1, 1), CENTER, BORDER, NO_INVERT);
-		printText("Controls", pos(1, 19), scale(1, 1), CENTER, BORDER, INVERT);
-		printText("Credits", pos(1, 26), scale(1, 1), CENTER, BORDER, NO_INVERT);
+		printText("Play", pos(58, 5), scale(1, 1));
+		printText("Highscore", pos(51, 12), scale(1, 1));
+		printText("-> Controls", pos(41, 19), scale(1, 1));
+		printText("Credits", pos(54, 26), scale(1, 1));
 		break;
 	case 4:
-		printText("Play", pos(1, 5), scale(1, 1), CENTER, BORDER, NO_INVERT);
-		printText("Highscore", pos(1, 12), scale(1, 1), CENTER, BORDER, NO_INVERT);
-		printText("Controls", pos(1, 19), scale(1, 1), CENTER, BORDER, NO_INVERT);
-		printText("Credits", pos(1, 26), scale(1, 1), CENTER, BORDER, INVERT);
+		printText("Play", pos(58, 5), scale(1, 1));
+		printText("Highscore", pos(51, 12), scale(1, 1));
+		printText("Controls", pos(52, 19), scale(1, 1));
+		printText("-> Credits", pos(43, 26), scale(1, 1));
 		break;
 	default:
 		break;
@@ -40,7 +42,7 @@ void printMenu(int menuOption) {
 
 void highscore() {
 	ClearDisplay;
-	printText("Highscore", pos(1, 5), scale(1, 1), CENTER, BORDER, NO_INVERT);
+	printText("Highscore", pos(51, 3), scale(1, 1));
 	displayUpdate();
 	while (1) {                     // Retur alternativ till menu (1 knapp)
 		if ((getBtns() & 1) == 1) {
@@ -54,8 +56,11 @@ void highscore() {
 
 void controls() {
 	ClearDisplay;
-	printText("Controls", pos(1, 5), scale(1, 1), CENTER, BORDER, NO_INVERT);
-	printText("Placeholder", pos(1, 12), scale(1, 1), CENTER, BORDER, NO_INVERT);
+	printText("Controls", pos(52, 3), scale(1, 1));
+	printText("Button 1: ESC", pos(1, 9), scale(1, 1));
+	printText("Button 2: Select", pos(1, 15), scale(1, 1));
+	printText("Button 3: Down/Dash", pos(1, 21), scale(1, 1));
+	printText("Button 4: Up/Jump", pos(1, 27), scale(1, 1));
 	displayUpdate();
 
 	while (1) {                     // Retur alternativ till menu (1 knapp)
@@ -69,8 +74,9 @@ void controls() {
 void credits() {
 
 	ClearDisplay;
-	printText("Credits", pos(1, 5), scale(1, 1), CENTER, BORDER, NO_INVERT);
-	printText("Placeholder", pos(1, 12), scale(1, 1), CENTER, NO_BORDER, NO_INVERT);
+	printText("Credits", pos(54, 3), scale(1, 1));
+	printText("Pavel Urvantsev (20030502-8615)", pos(1, 9), scale(1, 1));
+	printText("Mehrdad Vafaee (20020915-8211)", pos(1, 15), scale(1, 1));
 	displayUpdate();
 
 	while (1) {                     // Retur alternativ till menu (1 knapp)
@@ -83,23 +89,11 @@ void credits() {
 
 void menu() {
 	int menuOption = 1;
-
-	ClearDisplay;
-
-	printText("Play", pos(1, 5), scale(1, 1), CENTER, BORDER, INVERT);
-	printText("Highscore", pos(1, 12), scale(1, 1), CENTER, BORDER, NO_INVERT);
-	printText("Controls", pos(1, 19), scale(1, 1), CENTER, BORDER, NO_INVERT);
-	printText("Credits", pos(1, 26), scale(1, 1), CENTER, BORDER, NO_INVERT);
-	displayUpdate();
+	int exitMenu = 0;
+	
 	//void printText(char* string, struct vec pos, struct vec scale, enum Align align, enum Border border, enum Invert invert);
-
-	while (1)
-	{
-		ClearDisplay;
-
-
-		PORTE = getBtns();
-
+	printMenu(menuOption);
+	while (!exitMenu) {
 
 		if ((getBtns() & 8) == 8) {
 			menuOption--;
@@ -121,52 +115,44 @@ void menu() {
 		}
 		if ((getBtns() & 2) == 2) {
 
-			if (menuOption == 1) {
-				game();
-			}
-			else if (menuOption == 2) {
-				highscore();
-			}
-			else if (menuOption == 3) {
-				controls();
-			}
-			else if (menuOption == 4) {
-
-				credits();
-			}
-
-			/*switch (menuOption) {
+			switch (menuOption) {
 			case 1:
-
+				gameON = 1;
+				exitMenu = 1;
 				break;
 			case 2:
-
+				highscore();
 				break;
 			case 3:
-
+				controls();
 				break;
 			case 4:
-
+				credits();
 				break;
 			default:
 				break;
-			}*/
+			}
+				printMenu(menuOption);
 		}
 	}
-
 	// Bestämd utskrift 
 	// Stäng av alternativ?? 
 }
 
 void printGameOver(int gameOverOption) {
+
+	ClearDisplay;
+
 	switch (gameOverOption) {
 	case 1:
-		printText("Retry", pos(32, 20), scale(1, 1), CENTER, BORDER, INVERT);
-		printText("Menu", pos(96, 20), scale(1, 1), CENTER, BORDER, NO_INVERT);
+		printText("GAME OVER", pos(47, 10), scale(1, 1));
+		printText("-> Retry", pos(28, 20), scale(1, 1));
+		printText("Menu", pos(74, 20), scale(1, 1));
 		break;
 	case 2:
-		printText("Retry", pos(32, 20), scale(1, 1), CENTER, BORDER, NO_INVERT);
-		printText("Menu", pos(96, 20), scale(1, 1), CENTER, BORDER, INVERT);
+		printText("GAME OVER", pos(47, 10), scale(1, 1));
+		printText("Retry", pos(32, 20), scale(1, 1));
+		printText("-> Menu", pos(63, 20), scale(1, 1));
 		break;
 	default:
 		break;
@@ -176,17 +162,12 @@ void printGameOver(int gameOverOption) {
 
 void gameOver() {
 	int gameOverOption = 1;
+	int exitGameOver = 0;
 
-	ClearDisplay;
+	printGameOver(gameOverOption);
 
-	printText("GAME OVER", pos(20, 10), scale(1, 1), CENTER, BORDER, NO_INVERT);
-	printText("Retry", pos(32, 20), scale(1, 1), CENTER, BORDER, NO_INVERT);
-	printText("Menu", pos(96, 20), scale(1, 1), CENTER, BORDER, NO_INVERT);
-
-	displayUpdate();
-	while (1)
-	{
-	ClearDisplay;
+	while (!exitGameOver) {
+		ClearDisplay;
 
 		if ((getBtns() & 8) == 8) {   // Gå upp och ner i menyn med knappar (2 knappar)
 
@@ -213,16 +194,15 @@ void gameOver() {
 		if ((getBtns() & 2) == 2) { // Select knapp som går in i vald alternativ (1 knapp)
 			switch (gameOverOption) {
 			case 1:
-				//gameReset();
-				game();
+				gameON = 1;
 				break;
 			case 2:
-				delay(2000);
-				menu();
 				break;
 			default:
 				break;
 			}
+			exitGameOver = 1;
+			delay(1000);
 		}
 	}
 }

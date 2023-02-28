@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include "menu.h"
 
+int gameON = 0;
+
 void displayInit() {
 	CMD_MODE_ON;
 	DISPLAY_VDD_ON;						//Power on controller
@@ -82,7 +84,17 @@ int main() {
 	fontInit();
 	gameSetup();
 
-	menu();
+
+	while (1)
+	{
+		if (gameON) {
+			game();
+			gameOver();
+		}
+		else {
+			menu();
+		}
+	}
 
 	//game();	
 

@@ -1045,7 +1045,7 @@ void drawSprite(struct Sprite asset, struct Vec pos, struct Vec scale) {
 	//printf("-----------------------\n");
 }
 
-void printText(char* string, struct Vec pos, struct Vec scale, enum Align align, enum Border border, enum Invert invert) {
+void printText(char* string, struct Vec pos, struct Vec scale) {
 
 	int i = 0;
 
@@ -1060,9 +1060,6 @@ void printText(char* string, struct Vec pos, struct Vec scale, enum Align align,
 		}
 		pos.x += fontz[(int)(string[i]) - 32].width + 1;
 		i++;
-	}
-	if (invert == INVERT) {
-		drawSprite(fontz[(int)('<') - 32], pos, scale);
 	}
 
 }
@@ -1087,7 +1084,7 @@ void digitToChar(int num, int x, int offset, char* buffer) {
 	}
 }
 
-void printNum(float num, struct Vec pos, struct Vec scale, enum Align align, enum Border border, enum Invert invert) {
+void printNum(float num, struct Vec pos, struct Vec scale) {
 
 	char string[9] = { 0 };
 
@@ -1098,18 +1095,18 @@ void printNum(float num, struct Vec pos, struct Vec scale, enum Align align, enu
 		temp /= 10;
 		digits++;
 	}
-	
+
 	if ((int)num == 0) {
 		string[0] = '0';
 		digits += 1;
 	}
 	else {
-	digitToChar((int)num, digits, 0, string);
+		digitToChar((int)num, digits, 0, string);
 	}
 	num -= (int)num;
 	string[digits] = '.';
 
 	digitToChar((int)(num * 100 + 0.5), 2, digits + 1, string);
 
-	printText(string, pos, scale, align, border, invert);
+	printText(string, pos, scale);
 }

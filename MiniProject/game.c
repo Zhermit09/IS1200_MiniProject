@@ -5,12 +5,10 @@
 #define pos(x,y) (struct Vec){x,y}
 #define scale(x,y) (struct Vec){x,y}
 
-int gameON = 1;
+extern gameON;
 const float g = 9.82f;
 float dt = 0;
 int c = 0;
-
-int gameOverOption = 1;
 
 uint8_t birdMatrix[bHeight][bWidth] =
 {
@@ -52,7 +50,7 @@ void dash() {
 
 void gravity() {
 	int s = bird.vel;
-	bird.vel += (g / 2)/20;
+	bird.vel += (g / 2) / 20;
 
 	if (s > 4) {
 		s = 4;
@@ -67,8 +65,7 @@ void movePipe(struct Pipe pipe) {
 }
 
 void UI() {
-	printNum((float)rand(), pos(50, 10), scale(1, 1), NO_ALIGN, NO_BORDER, NO_INVERT);
-	delay(1000);
+	printNum((float)rand(), pos(50, 10), scale(1, 1));
 
 	/*printText(" !\"#$%&\'()*+,-./0123456789:;<=>?", pos, scale, NO_ALIGN, NO_BORDER, NO_INVERT);
 	pos.y += 6;
@@ -86,14 +83,6 @@ void UI() {
 void game() {
 
 	while (gameON) {
-		/*if (c == 10) {
-			dt = stopTimer();
-			c = 0;
-		}
-		else {
-			stopTimer();
-		}
-		c++;*/
 		dt = stopTimer();
 		startTimer();
 
@@ -114,12 +103,10 @@ void game() {
 		if ((getBtns() & 2) == 2) {
 			//bird.pos.y -= 1;
 			bird.vel = -3;
-			delay(10);
 		}
 		if ((getBtns() & 1) == 1) {
-			gameOver();
+			gameON = 0;
 		}
 	}
-
 
 }

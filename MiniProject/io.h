@@ -65,9 +65,9 @@ struct Sprite {
 	uint8_t *sprite;
 };
 
-enum Align { NO_ALIGN, LEFT, X_CENTER, Y_CENTER, CENTER, RIGHT };
+/*enum Align { NO_ALIGN, LEFT, X_CENTER, Y_CENTER, CENTER, RIGHT };
 enum Border { NO_BORDER, BORDER };
-enum Invert { NO_INVERT, INVERT };
+enum Invert { NO_INVERT, INVERT };*/
 
 uint8_t canvas[32][128];
 struct Sprite blank;
@@ -81,8 +81,8 @@ int getBtns(void);
 
 uint8_t spi(uint8_t data);
 void displayUpdate();
-void printText(char* string, struct Vec pos, struct Vec scale, enum Align align, enum Border border, enum Invert invert);
-void printNum(float num, struct Vec pos, struct Vec scale, enum Align align, enum Border border, enum Invert invert);
+void printText(char* string, struct Vec pos, struct Vec scale);
+void printNum(float num, struct Vec pos, struct Vec scale);
 void drawSprite(struct Sprite asset, struct Vec pos, struct Vec scale);
 
 void fontInit();
