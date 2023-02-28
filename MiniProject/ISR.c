@@ -1,17 +1,20 @@
 #include "pic32mx.h"
+#include <stdint.h>
 
 extern int delayAmount;
-int i = 0;
+extern int64_t timer;
 
 void ISR() {
 
 	if (IFS(0) & 0x100) {
 
-		//PORTE = ~PORTE;
+		//PORTE =timer;
 
 		if (delayAmount > 0) {
 			delayAmount--;
 		}
+
+		timer++;
 
 		IFSCLR(0) = 0x100;
 	}
