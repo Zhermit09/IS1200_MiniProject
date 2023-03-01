@@ -2,6 +2,9 @@
 #define _GAME_
 #include "io.h"
 
+#define pos(x,y) (struct Vec){x,y}
+#define scale(x,y) (struct Vec){x,y}
+
 struct Bird {
 	struct Sprite image;
 	

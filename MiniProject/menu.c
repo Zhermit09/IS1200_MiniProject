@@ -3,55 +3,20 @@
 #include "menu.h"
 #include "game.h"
 
+#define sWidth(x) fontz[(int)(x - 32)].width
+
 extern gameON;
 
-
-void printMenu(int menuOption) {
-	ClearDisplay;
-	switch (menuOption) {
-	case 1:
-		printText("-> Play", pos(47, 5), scale(1, 1));
-		printText("Highscore", pos(51, 12), scale(1, 1));
-		printText("Controls", pos(52, 19), scale(1, 1));
-		printText("Credits", pos(54, 26), scale(1, 1));
-		break;
-	case 2:
-		printText("Play", pos(58, 5), scale(1, 1));
-		printText("-> Highscore", pos(40, 12), scale(1, 1));
-		printText("Controls", pos(52, 19), scale(1, 1));
-		printText("Credits", pos(54, 26), scale(1, 1));
-		break;
-	case 3:
-		printText("Play", pos(58, 5), scale(1, 1));
-		printText("Highscore", pos(51, 12), scale(1, 1));
-		printText("-> Controls", pos(41, 19), scale(1, 1));
-		printText("Credits", pos(54, 26), scale(1, 1));
-		break;
-	case 4:
-		printText("Play", pos(58, 5), scale(1, 1));
-		printText("Highscore", pos(51, 12), scale(1, 1));
-		printText("Controls", pos(52, 19), scale(1, 1));
-		printText("-> Credits", pos(43, 26), scale(1, 1));
-		break;
-	default:
-		break;
-	}
-
-	displayUpdate();
-}
-
-char initials[4][3] = { "___", "___", "___", "AAA" };
-int highscores[3] = { 0 };
 
 void highscore() {
 	ClearDisplay;
 	printText("Highscore", pos(51, 1), scale(1, 1));
-	printText(initials[0], pos(57, 7), scale(1, 1));
-	printText(initials[1], pos(57, 14), scale(1, 1));
-	printText(initials[2], pos(57, 21), scale(1, 1));
-	Iprint(highscores[0], pos(77, 12), scale(1, 1));
-	Iprint(highscores[1], pos(77, 19), scale(1, 1));
-	Iprint(highscores[2], pos(77, 26), scale(1, 1));
+	printText(hScores[0].initials, pos(57, 7), scale(1, 1));
+	printText(hScores[1].initials, pos(57, 14), scale(1, 1));
+	printText(hScores[2].initials, pos(57, 21), scale(1, 1));
+	Iprint(hScores[0].score, pos(77, 12), scale(1, 1));
+	Iprint(hScores[0].score, pos(77, 19), scale(1, 1));
+	Iprint(hScores[0].score, pos(77, 26), scale(1, 1));
 	displayUpdate();
 	while (1) {                     // Retur alternativ till menu (1 knapp)
 		if ((getBtns() & 1) == 1) {
@@ -92,10 +57,44 @@ void credits() {
 	// Bestämd utskrift
 }
 
+void printMenu(int menuOption) {
+	ClearDisplay;
+	switch (menuOption) {
+	case 1:
+		printText("-> Play", pos(47, 5), scale(1, 1));
+		printText("Highscore", pos(51, 12), scale(1, 1));
+		printText("Controls", pos(52, 19), scale(1, 1));
+		printText("Credits", pos(54, 26), scale(1, 1));
+		break;
+	case 2:
+		printText("Play", pos(58, 5), scale(1, 1));
+		printText("-> Highscore", pos(40, 12), scale(1, 1));
+		printText("Controls", pos(52, 19), scale(1, 1));
+		printText("Credits", pos(54, 26), scale(1, 1));
+		break;
+	case 3:
+		printText("Play", pos(58, 5), scale(1, 1));
+		printText("Highscore", pos(51, 12), scale(1, 1));
+		printText("-> Controls", pos(41, 19), scale(1, 1));
+		printText("Credits", pos(54, 26), scale(1, 1));
+		break;
+	case 4:
+		printText("Play", pos(58, 5), scale(1, 1));
+		printText("Highscore", pos(51, 12), scale(1, 1));
+		printText("Controls", pos(52, 19), scale(1, 1));
+		printText("-> Credits", pos(43, 26), scale(1, 1));
+		break;
+	default:
+		break;
+	}
+
+	displayUpdate();
+}
+
 void menu() {
 	int menuOption = 1;
 	int exitMenu = 0;
-	
+
 	//void printText(char* string, struct vec pos, struct vec scale, enum Align align, enum Border border, enum Invert invert);
 	printMenu(menuOption);
 	while (!exitMenu) {
@@ -137,7 +136,7 @@ void menu() {
 			default:
 				break;
 			}
-				printMenu(menuOption);
+			printMenu(menuOption);
 		}
 	}
 	// Bestämd utskrift 
@@ -209,5 +208,103 @@ void gameOver() {
 			exitGameOver = 1;
 			delay(1000);
 		}
+	}
+}
+
+
+int hsMenuOption = 0;
+char myInitials[3] = "AAA";
+
+void printInitials(struct Vec p) {
+	struct Vec a = pos(p.x, p.y + 6);
+
+	printText(myInitials, p, scale(1, 1));
+
+	switch (hsMenuOption) {
+	case 0:
+		a.x = p.x + (sWidth(myInitials[0]) - 5) / 2;
+		break;
+	case 1:
+		a.x = p.x + 1 + sWidth(myInitials[0]) + (sWidth(myInitials[1]) - 5) / 2;
+		break;
+	case 2:
+		a.x = p.x + 2 + sWidth(myInitials[0]) + sWidth(myInitials[1]) + (sWidth(myInitials[2]) - 5) / 2;
+		break;
+	default:
+		break;
+	}
+	printText("^", a, scale(1, 1));
+	displayUpdate();
+}
+
+//int updating = 1;
+void highscoreUpdate(int count) {
+	struct Vec p = pos(47, 10);
+
+	int i;
+	int j;
+
+	for (i = 2; i > count; i--)
+	{
+		for (j = 0; j < 3; j++) {
+			hScores[i].initials[j] = hScores[i-1].initials[j];
+		}
+	}
+	ClearDisplay;
+	printInitials(p);
+
+	while (1)
+	{
+		ClearDisplay;
+		delay(100);
+
+		if ((getBtns() & 8) == 8) {
+			hsMenuOption++;
+			if (hsMenuOption > 2)
+			{
+				hsMenuOption = 0;
+			}
+			printInitials(p);
+		}
+		if ((getBtns() & 4) == 4) {
+			myInitials[hsMenuOption]++;
+
+			if (myInitials[hsMenuOption] > 90)
+			{
+				myInitials[hsMenuOption] = 65;
+			}
+
+			printInitials(p);
+		}
+		if ((getBtns() & 2) == 2) {
+			hsMenuOption = 0;
+			myInitials[0] = 'A';
+			myInitials[1] = 'A';
+			myInitials[2] = 'A';
+			delay(1000);
+			break;
+		}
+	}
+
+}
+
+void scoreCheck(int score) {
+	if (score > hScores[0].score)
+	{
+		hScores[2].score = hScores[1].score;
+		hScores[1].score = hScores[0].score;
+		hScores[0].score = score;
+		highscoreUpdate(0);
+	}
+	else if (score > hScores[1].score)
+	{
+		hScores[2].score = hScores[1].score;
+		hScores[1].score = score;
+		highscoreUpdate(1);
+	}
+	else if (score > hScores[2].score)
+	{
+		hScores[2].score = score;
+		highscoreUpdate(2);
 	}
 }
