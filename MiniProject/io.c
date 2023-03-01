@@ -962,13 +962,13 @@ void startTimer() {
 	timer = 0;
 }
 
-float stopTimer() {
-	return timer * T_PERIOD;
+double stopTimer() {
+	return 2* timer * T_PERIOD;
 }
 
 void delay(int ms) {
 
-	delayAmount = ms / (1000 * T_PERIOD);
+	delayAmount = ms / (2 * 1000 * T_PERIOD);
 	while (delayAmount > 0);
 }
 

@@ -10,17 +10,18 @@ struct Bird {
 	
 	struct Vec pos;
 	int hit;
-	float vel;
+	double y_vel;
+	double x_vel;
 
 };
 
 struct Pipe {
-
 	struct Vec pos;
 
 };
 
 struct Bird bird;
+struct Pipe pipes[4];
 
 void gameSetup();
 void game();

@@ -56,7 +56,6 @@ void preDisplayInit() {
 	SPI2CONSET = 0x8060;				//Turn on SPI, Set CKP = 1, MSTEN = 1
 }
 
-
 /* Non-Maskable Interrupt; something bad likely happened, so hang */
 void _nmi_handler() {
 	for(;;);

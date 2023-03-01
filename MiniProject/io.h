@@ -74,7 +74,7 @@ struct Sprite blank;
 struct Sprite fontz[95];
 
 void startTimer();
-float stopTimer();
+double stopTimer();
 
 void delay(int ms);
 int getSw(void);

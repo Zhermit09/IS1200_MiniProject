@@ -17,7 +17,7 @@ void displayInit() {
 	delay(1);
 	DISPLAY_RESET_OFF;
 
-	//Charge pump + pre-charge period commands
+										//Charge pump + pre-charge period commands
 	spi(0x8D);
 	spi(0x14);
 
@@ -27,13 +27,16 @@ void displayInit() {
 	DISPLAY_VBATT_ON;					//Power on display
 	delay(100);
 
-	//Inert display cord system
+										//Inert display cord system
 	spi(0xA1);							//remap columns
 	spi(0xC8);							//remap rows
 
-	//Sequential COM, non-interleaved display memory
+										//Sequential COM, non-interleaved display memory
 	spi(0xDA);							//COM config
 	spi(0x20);							//Sequential COM
+
+	spi(0xD5);							//Set oscillator frequency and display clock divide ratio
+	spi(0xF0);							//Max frequency and divide ratio of 1
 
 	spi(0xAF);							//Display on
 }
@@ -78,7 +81,6 @@ void displayInit() {
 
 
 int main() {
-	startTimer();
 	displayInit();
 	fontInit();
 	gameSetup();

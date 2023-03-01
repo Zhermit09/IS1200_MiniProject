@@ -6,6 +6,7 @@
 #define sWidth(x) fontz[(int)(x - 32)].width
 
 extern gameON;
+extern int seed;
 
 
 void highscore() {
@@ -91,6 +92,15 @@ void printMenu(int menuOption) {
 	displayUpdate();
 }
 
+void genSeed() {
+	int i;
+	seed = (int)(stopTimer() * 1000000000);
+	for (i = 0; i < 10; i++) {
+		srand(seed);
+		seed = rand();
+	}
+}
+
 void menu() {
 	int menuOption = 1;
 	int exitMenu = 0;
@@ -98,7 +108,7 @@ void menu() {
 	//void printText(char* string, struct vec pos, struct vec scale, enum Align align, enum Border border, enum Invert invert);
 	printMenu(menuOption);
 	while (!exitMenu) {
-
+		PORTE = T_PERIOD_VALUE;
 		if ((getBtns() & 8) == 8) {
 			menuOption--;
 			if (menuOption < 1)
@@ -123,6 +133,7 @@ void menu() {
 			case 1:
 				gameON = 1;
 				exitMenu = 1;
+				genSeed();
 				break;
 			case 2:
 				highscore();
