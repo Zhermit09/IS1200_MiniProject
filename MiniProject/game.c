@@ -211,13 +211,6 @@ void collision() {
 			}
 		}
 	}
-
-	if (bird.hit) {
-		PORTE = 0xF0;
-	}
-	if(!bird.hit) {
-		PORTE = 0xf;
-	}
 }
 
 void game() {
@@ -228,39 +221,31 @@ void game() {
 		dt = stopTimer();
 		startTimer();
 
-		draw();
-
-		//gravity();
-		//glide();
+		gravity();
+		glide();
 		scoreUpdate();
 		collision();
 
 		if (bird.pos.y > 25) {
-			//jump();
+			jump();
 		}
 
 		if (bt4) {
-			//jump();
+			jump();
 			button4 = 0;
-			bird.pos.x -= 1;
 		}
 		if (bt3) {
-			bird.pos.x += 1;
 			dash();
 			button3 = 0;
 		}
 		if (bt2) {
-			bird.pos.y -= 1;
 			button2 = 0;
 		}
 		if (bt1) {
-			bird.pos.y += 1;
-			//gameON = 0;
 			button1 = 0;
 		}
-		if (getSw() != 0) {
-			bird.hit = 0;
-		}
+
+		draw();
 	}
 }
 

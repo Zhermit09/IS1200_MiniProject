@@ -18,7 +18,7 @@ void checkBts() {
 		button2 = 1;
 	}
 
-	if ((getBtns() & 2) == 0) {
+	if ((getBtns() & 1) == 0) {
 		button1 = 1;
 	}
 }
@@ -34,7 +34,6 @@ void ISR() {
 		}
 
 		timer++;
-		//PORTE = getBtns();
 
 		IFSCLR(0) = 0x100;
 	}

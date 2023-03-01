@@ -1027,22 +1027,11 @@ void drawSprite(struct Sprite asset, struct Vec pos, struct Vec scale) {
 	h = height - y;
 	w = width - x;
 
-	//int c = 0;
-	//printf("y = %d\tx = %d\nh = %d\tw = %d\nhe = %d\twi = %d\n",y,x,h,w,height,width);
 	for (i = y; i < y + h; i++) {
 		for (j = x; j < x + w; j++) {
 			canvas[i][j] = *(asset.sprite + (j - pos.x) + (i - pos.y) * asset.width);
-			/*		c = *(asset.sprite + (j - pos.x) + (i - pos.y) * asset.width);
-					if (c != 0) {
-					printf("%d", c);
-					}
-					else {
-						printf(" ");
-					}*/
 		}
-		//printf("\n");
 	}
-	//printf("-----------------------\n");
 }
 
 void printText(char* string, struct Vec pos, struct Vec scale) {

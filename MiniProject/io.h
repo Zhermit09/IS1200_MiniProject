@@ -65,10 +65,6 @@ struct Sprite {
 	uint8_t *sprite;
 };
 
-/*enum Align { NO_ALIGN, LEFT, X_CENTER, Y_CENTER, CENTER, RIGHT };
-enum Border { NO_BORDER, BORDER };
-enum Invert { NO_INVERT, INVERT };*/
-
 uint8_t canvas[32][128];
 struct Sprite blank;
 struct Sprite fontz[95];
