@@ -69,6 +69,11 @@ void _on_reset() {
 /* This function is called before main() is called, you can do setup here */
 void _on_bootstrap() {
 	
+	button4 = 0;
+	button3 = 0;
+	button2 = 0;
+	button1 = 0;
+
 	initLed();
 	initHID();
 	initTimer();

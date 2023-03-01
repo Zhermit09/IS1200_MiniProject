@@ -21,7 +21,8 @@ struct Pipe {
 };
 
 struct Bird bird;
-struct Pipe pipes[4];
+struct Pipe pipes[5];
+
 
 void gameSetup();
 void game();

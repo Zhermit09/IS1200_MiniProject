@@ -88,5 +88,11 @@ void drawSprite(struct Sprite asset, struct Vec pos, struct Vec scale);
 void Iprint(int i, struct Vec pos, struct Vec scale);
 void Fprint(float f, struct Vec pos, struct Vec scale);
 
+int button4;
+int button3;
+int button2;
+int button1;
+
+void checkBts();
 void fontInit();
 #endif // end of _IO_

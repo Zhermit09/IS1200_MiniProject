@@ -11,12 +11,12 @@ extern gameON;
 const float g = 9.82f;
 
 int seed = 0;
+int score = 0;
 
 double dt = 0;
 double time = 0;
 int c = 0;
 float fps = 0;
-
 
 struct HighScore hScores[3];
 
@@ -80,6 +80,9 @@ void gameSetup() {
 	hScores[1] = (struct HighScore){ "___", 0 };
 	hScores[2] = (struct HighScore){ "___", 0 };
 
+	for (i = 0; i < 5; i++) {
+		pipes[i].pos = pos((0 + i * (pWidth + SPACE)), rand() % (28 - (GAP + 4)) + GAP + 4);
+	}
 
 }
 
@@ -91,10 +94,7 @@ int matrixOverlap(struct Vec pos1, struct Vec size1, struct Vec pos2, struct Vec
 }
 
 void jump() {
-	if (bird.pos.y > 25) {
-		bird.y_vel = -650 * dt;
-	}
-
+	bird.y_vel = -650 * dt;
 }
 
 void dash() {
@@ -107,7 +107,7 @@ void dash() {
 
 void glide() {
 
-	int s = bird.x_vel * 10 * dt;
+	double s = bird.x_vel * 10 * dt;
 	bird.x_vel -= (g / 2) / 20 * 275 * dt;
 
 	if (s > 4) {
@@ -125,7 +125,7 @@ void glide() {
 }
 
 void gravity() {
-	int s = bird.y_vel * 50 * dt;
+	double s = bird.y_vel * 50 * dt;
 	bird.y_vel += (g / 2) / 20 * 100 * dt;
 
 	if (s > 4) {
@@ -136,8 +136,13 @@ void gravity() {
 
 }
 
-void movePipe(struct Pipe pipe) {
-	pipe.pos.x -= 30;
+void genRandomPipe() {
+
+	int i;
+
+	for (i = 0; i < 4; i++) {
+		pipes[i].pos = pos((10 + i * (pWidth + SPACE)), rand() % (28 - (GAP + 4)) + GAP + 4);
+	}
 }
 
 void UI() {
@@ -147,6 +152,7 @@ void UI() {
 		c = 0;
 	}
 	Fprint(fps, pos(110, 1), scale(1, 1));
+	Iprint(score, pos(61, 1), scale(1, 1));
 	c++;
 	time += dt;
 
@@ -161,44 +167,99 @@ void UI() {
 	printText(" !\"#$%&\'()*+,-./0123456789:;<=>?", pos, scale, NO_ALIGN, NO_BORDER, NO_INVERT);*/
 }
 
+void pipeCycle(int i) {
+	if (pipes[i].pos.x <= -pWidth) {
+		pipes[i].pos.x = SPACE + 4*(pWidth + SPACE);
+	}
+}
 
+void draw() {
+	int i;
+
+	ClearDisplay;
+
+	for (i = 0; i < 5; i++) {
+		//pipes[i].pos.x -= (int)(45 * dt + 0.5);
+
+		pipeCycle(i);
+		drawSprite(pImage, pipes[i].pos, scale(1, 1));
+		drawSprite(pImage, pos(pipes[i].pos.x, pipes[i].pos.y - pHeight - GAP), scale(1, 1));
+
+	}
+	drawSprite(bird.image, bird.pos, scale(1, 1));
+	UI();
+	displayUpdate();
+}
+
+void scoreUpdate() {
+	if (bird.pos.x >= pipes[score % 5].pos.x) {
+		score++;
+	}
+}
+
+void collision() {
+	int i;
+
+	if (bird.pos.y + bHeight >= 30) {
+		bird.hit = 1;
+	}
+
+	for (i = 0; i < 5; i++) {
+		if (bird.pos.x + bWidth >= pipes[i].pos.x && bird.pos.x <= pipes[i].pos.x + pWidth) {
+			if (!(bird.pos.y + bHeight < pipes[i].pos.y && bird.pos.y > pipes[i].pos.y - GAP)) {
+				bird.hit = 1;
+			}
+		}
+	}
+
+	if (bird.hit) {
+		PORTE = 0xF0;
+	}
+	if(!bird.hit) {
+		PORTE = 0xf;
+	}
+}
 
 void game() {
 	int i;
-
-	for (i = 0; i < 4; i++) {
-		pipes[i].pos = pos((10 + i * (pWidth + SPACE)), rand() % (28- (GAP + 4)) + GAP + 4);
-	}
 
 	startTimer();
 	while (gameON) {
 		dt = stopTimer();
 		startTimer();
 
-		ClearDisplay;
+		draw();
 
-		for(i = 0; i<4;i++){
-		drawSprite(pImage, pipes[i].pos, scale(1, 1));
-		drawSprite(pImage, pos(pipes[i].pos.x, pipes[i].pos.y - pHeight - GAP), scale(1, 1));
+		//gravity();
+		//glide();
+		scoreUpdate();
+		collision();
+
+		if (bird.pos.y > 25) {
+			//jump();
 		}
-		drawSprite(bird.image, bird.pos, scale(1, 1));
-		UI();
-		displayUpdate();
 
-		gravity();
-		glide();
-		jump();
-
-		if ((getBtns() & 8) == 8) {
+		if (bt4) {
+			//jump();
+			button4 = 0;
+			bird.pos.x -= 1;
 		}
-		if ((getBtns() & 4) == 4) {
+		if (bt3) {
+			bird.pos.x += 1;
 			dash();
+			button3 = 0;
 		}
-		if ((getBtns() & 2) == 2) {
-			bird.y_vel = -500 * dt;
+		if (bt2) {
+			bird.pos.y -= 1;
+			button2 = 0;
 		}
-		if ((getBtns() & 1) == 1) {
-			gameON = 0;
+		if (bt1) {
+			bird.pos.y += 1;
+			//gameON = 0;
+			button1 = 0;
+		}
+		if (getSw() != 0) {
+			bird.hit = 0;
 		}
 	}
 }

@@ -8,6 +8,8 @@
 extern gameON;
 extern int seed;
 
+int hsMenuOption = 0;
+char myInitials[3] = "AAA";			//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 void highscore() {
 	ClearDisplay;
@@ -19,12 +21,15 @@ void highscore() {
 	Iprint(hScores[0].score, pos(77, 19), scale(1, 1));
 	Iprint(hScores[0].score, pos(77, 26), scale(1, 1));
 	displayUpdate();
+
 	while (1) {                     // Retur alternativ till menu (1 knapp)
-		if ((getBtns() & 1) == 1) {
+		if (bt1) {
+			button1 = 0;
 			break;
 		}
 	}
 }
+
 void controls() {
 	ClearDisplay;
 	printText("Controls", pos(52, 3), scale(1, 1));
@@ -35,7 +40,8 @@ void controls() {
 	displayUpdate();
 
 	while (1) {                     // Retur alternativ till menu (1 knapp)
-		if ((getBtns() & 1) == 1) {
+		if (bt1) {
+			button1 = 0;
 			break;
 		}
 	}
@@ -51,7 +57,8 @@ void credits() {
 	displayUpdate();
 
 	while (1) {                     // Retur alternativ till menu (1 knapp)
-		if ((getBtns() & 1) == 1) {
+		if (bt1) {
+			button1 = 0;
 			break;
 		}
 	}
@@ -108,16 +115,16 @@ void menu() {
 	//void printText(char* string, struct vec pos, struct vec scale, enum Align align, enum Border border, enum Invert invert);
 	printMenu(menuOption);
 	while (!exitMenu) {
-		PORTE = T_PERIOD_VALUE;
-		if ((getBtns() & 8) == 8) {
+		if (bt4) {
 			menuOption--;
 			if (menuOption < 1)
 			{
 				menuOption = 4;
 			}
 			printMenu(menuOption);
+			button4 = 0;
 		}
-		if ((getBtns() & 4) == 4) {
+		if (bt3) {
 			menuOption++;
 			if (menuOption > 4)
 			{
@@ -125,9 +132,10 @@ void menu() {
 			}
 
 			printMenu(menuOption);
+			button3 = 0;
 
 		}
-		if ((getBtns() & 2) == 2) {
+		if (bt2) {
 
 			switch (menuOption) {
 			case 1:
@@ -148,6 +156,7 @@ void menu() {
 				break;
 			}
 			printMenu(menuOption);
+			button2 = 0;
 		}
 	}
 	// Bestämd utskrift 
@@ -184,7 +193,7 @@ void gameOver() {
 	while (!exitGameOver) {
 		ClearDisplay;
 
-		if ((getBtns() & 8) == 8) {   // Gå upp och ner i menyn med knappar (2 knappar)
+		if (bt4) {   // Gå upp och ner i menyn med knappar (2 knappar)
 
 			gameOverOption--;
 			if (gameOverOption < 1)
@@ -193,9 +202,10 @@ void gameOver() {
 			}
 
 			printGameOver(gameOverOption);
+			button4 = 0;
 
 		}
-		if ((getBtns() & 4) == 4) {   // Gå upp och ner i menyn med knappar (2 knappar)
+		if (bt3) {   // Gå upp och ner i menyn med knappar (2 knappar)
 
 			gameOverOption++;
 			if (gameOverOption > 2)
@@ -204,9 +214,9 @@ void gameOver() {
 			}
 
 			printGameOver(gameOverOption);
-
+			button3 = 0;
 		}
-		if ((getBtns() & 2) == 2) { // Select knapp som går in i vald alternativ (1 knapp)
+		if (bt2) { // Select knapp som går in i vald alternativ (1 knapp)
 			switch (gameOverOption) {
 			case 1:
 				gameON = 1;
@@ -217,14 +227,10 @@ void gameOver() {
 				break;
 			}
 			exitGameOver = 1;
-			delay(1000);
+			button2 = 0;
 		}
 	}
 }
-
-
-int hsMenuOption = 0;
-char myInitials[3] = "AAA";
 
 void printInitials(struct Vec p) {
 	struct Vec a = pos(p.x, p.y + 6);
@@ -248,7 +254,6 @@ void printInitials(struct Vec p) {
 	displayUpdate();
 }
 
-//int updating = 1;
 void highscoreUpdate(int count) {
 	struct Vec p = pos(47, 10);
 
@@ -269,15 +274,16 @@ void highscoreUpdate(int count) {
 		ClearDisplay;
 		delay(100);
 
-		if ((getBtns() & 8) == 8) {
+		if (bt4) {
 			hsMenuOption++;
 			if (hsMenuOption > 2)
 			{
 				hsMenuOption = 0;
 			}
 			printInitials(p);
+			button4 = 0;
 		}
-		if ((getBtns() & 4) == 4) {
+		if (bt3) {
 			myInitials[hsMenuOption]++;
 
 			if (myInitials[hsMenuOption] > 90)
@@ -286,13 +292,19 @@ void highscoreUpdate(int count) {
 			}
 
 			printInitials(p);
+			button3 = 0;
 		}
-		if ((getBtns() & 2) == 2) {
+		if (bt2) {
 			hsMenuOption = 0;
+
+			for (i = 0; i < 3; i++) {
+				hScores[count].initials[i] = myInitials[i];
+			}
+
 			myInitials[0] = 'A';
 			myInitials[1] = 'A';
 			myInitials[2] = 'A';
-			delay(1000);
+			button2 = 0;
 			break;
 		}
 	}
