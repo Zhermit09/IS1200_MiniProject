@@ -8,14 +8,11 @@
 #define bt1 ((getBtns() & 1) == 1) && button1
 
 struct HighScore {
-
 	char initials[3];
 	int score;
-
 };
 
 extern struct HighScore hScores[];
-
 
 void menu();
 void highscore();

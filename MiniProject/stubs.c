@@ -79,6 +79,5 @@ void _on_bootstrap() {
 	initTimer();
 	
 	enable_interrupts();
-
 	preDisplayInit();
 }

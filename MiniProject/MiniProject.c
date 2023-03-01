@@ -6,6 +6,7 @@
 #include "menu.h"
 
 int gameON = 0;
+extern int score;
 
 void displayInit() {
 	CMD_MODE_ON;
@@ -90,7 +91,7 @@ int main() {
 	{
 		if (gameON) {
 			game();
-			scoreCheck(10);
+			scoreCheck(score);
 			gameOver();
 		}
 		else {

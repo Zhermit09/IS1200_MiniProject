@@ -49,10 +49,12 @@
 #define MAX(x,y) ((x > y)?x:y)
 
 #define pos(x,y) (struct Vec){x,y}
-#define scale(x,y) (struct Vec){x,y}
+#define ClearDisplay drawSprite(blank, pos(0,0))
 
-#define ClearDisplay drawSprite(blank, pos(0,0), scale(1,1))
-
+int button4;
+int button3;
+int button2;
+int button1;
 
 struct Vec {
 	int x;
@@ -78,16 +80,12 @@ int getBtns(void);
 
 uint8_t spi(uint8_t data);
 void displayUpdate();
-void printText(char* string, struct Vec pos, struct Vec scale);
-void drawSprite(struct Sprite asset, struct Vec pos, struct Vec scale);
+void printText(char* string, struct Vec pos);
+void drawSprite(struct Sprite asset, struct Vec pos);
 
-void Iprint(int i, struct Vec pos, struct Vec scale);
-void Fprint(float f, struct Vec pos, struct Vec scale);
+void Iprint(int i, struct Vec pos);
+void Fprint(float f, struct Vec pos);
 
-int button4;
-int button3;
-int button2;
-int button1;
 
 void checkBts();
 void fontInit();
