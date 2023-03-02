@@ -67,22 +67,30 @@ uint8_t pipeMatrix[pHeight][pWidth] =
 	{1,1,1,1,1,1,1,1,1},
 };
 
-struct Sprite pImage;
+uint8_t groundMatrix[2][128] =
+{
+	{_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1},
+	{1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_,1,_}
+};
 
 void gameSetup() {
 	bird.image = (struct Sprite){ bHeight, bWidth, &birdMatrix[0][0] };
 	bird.x = 10;
-	bird.y = 10;
+	bird.y = 5;
 
 	bird.hit = 0;
 	bird.y_vel = 0;
 	int i;
 	int x = 0;
 	pImage = (struct Sprite){ pHeight, pWidth, &pipeMatrix[0][0] };
+	gImage = (struct Sprite){ 3, 128, &groundMatrix[0][0] };
 
 	hScores[0] = (struct HighScore){ "___", 0 };
 	hScores[1] = (struct HighScore){ "___", 0 };
 	hScores[2] = (struct HighScore){ "___", 0 };
+
+	ground[0] = (struct Ground){ 0,30 };
+	ground[1] = (struct Ground){ 127,30 };
 
 	for (i = 0; i < 5; i++) {
 		pipes[i].x = 128 + i * (pWidth + SPACE);
@@ -119,12 +127,12 @@ void glide() {
 }
 
 void jump() {
-	bird.y_vel = -(350.0 * dt);
+	bird.y_vel = -(230.0 * dt);
 }
 
 void gravity() {
-	double s = 0.5 * bird.y_vel * 60 * dt;
-	bird.y_vel += g * 2 * dt;
+	double s = 0.5 * bird.y_vel * 40 * dt;
+	bird.y_vel += g * 1.07 * dt;
 
 	if (s > 1.5) {
 		s = 1.5;
@@ -141,7 +149,7 @@ void UI() {
 		c = 0;
 	}
 	Fprint(fps, pos(110, 1));
-	Iprint(score, pos(61, 1));
+	Iprint(score, pos(61, 7));
 	c++;
 	time += dt;
 }
@@ -150,6 +158,12 @@ void pipeCycle(int i) {
 	if (pipes[i].x <= -pWidth) {
 		pipes[i].x = SPACE + 4 * (pWidth + SPACE) + (pipes[i].x + pWidth);
 		pipes[i].y = pipes[i].y = rand() % (28 - (GAP + 4)) + GAP + 4;
+	}
+}
+
+void cycleGround(int i) {
+	if (ground[i].x <= -128) {
+		ground[i].x = 128 + (ground[i].x + 128);
 	}
 }
 
@@ -165,6 +179,13 @@ void draw() {
 		drawSprite(pImage, pos(round(pipes[i].x), round(pipes[i].y - pHeight - GAP)));
 
 	}
+
+	for (i = 0; i < 2; i++) {
+		ground[i].x -= PSPEED * dt;
+		cycleGround(i);
+		drawSprite(gImage, pos(ground[i].x, ground[i].y));
+	}
+
 	drawSprite(bird.image, pos(round(bird.x), round(bird.y)));
 	UI();
 	displayUpdate();
@@ -208,6 +229,43 @@ void difficulty() {
 void game() {
 	int i;
 
+	ClearDisplay;
+	printText("Ready", pos(53, 7));
+	drawSprite(bird.image, pos(round(bird.x), round(bird.y)));
+	for (i = 0; i < 2; i++) {
+		drawSprite(gImage, pos(ground[i].x, ground[i].y));
+	}
+	displayUpdate();
+	delay(1000);
+
+	ClearDisplay;
+	printText("3", pos(62, 7));
+	drawSprite(bird.image, pos(round(bird.x), round(bird.y)));
+	for (i = 0; i < 2; i++) {
+		drawSprite(gImage, pos(ground[i].x, ground[i].y));
+	}
+	displayUpdate();
+	delay(1000);
+
+	ClearDisplay;
+	printText("2", pos(62, 7));
+	drawSprite(bird.image, pos(round(bird.x), round(bird.y)));
+	for (i = 0; i < 2; i++) {
+		drawSprite(gImage, pos(ground[i].x, ground[i].y));
+	}
+	displayUpdate();
+	delay(1000);
+
+	ClearDisplay;
+	printText("1", pos(62, 7));
+	drawSprite(bird.image, pos(round(bird.x), round(bird.y)));
+	for (i = 0; i < 2; i++) {
+		drawSprite(gImage, pos(ground[i].x, ground[i].y));
+	}
+	displayUpdate();
+	delay(1000);
+
+	jump();
 	startTimer();
 	while (gameON) {
 		dt = stopTimer();
@@ -218,10 +276,6 @@ void game() {
 		scoreUpdate();
 		collision();
 		difficulty();
-
-		/*if (bird.y > 24) {
-			jump();
-		}*/
 
 		if (bt4) {
 			jump();
@@ -250,6 +304,9 @@ void game() {
 				pipes[i].x = 128 + i * (pWidth + SPACE);
 				pipes[i].y = rand() % (28 - (GAP + 4)) + GAP + 4;
 			}
+
+			ground[0].x = 0;
+			ground[1].x = 127;
 
 			time = 0;
 			c = 0;

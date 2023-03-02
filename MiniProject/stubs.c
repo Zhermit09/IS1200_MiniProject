@@ -28,33 +28,37 @@ void initTimer() {
 	T2CON = 0x8000 | T_PRESCALE_VALUE;	//Start timer / prescale
 }
 
+//The initialization routine was made based on Lab 3 files and reference manual, appendix B examples
+//We have a moderate understanding of this routine
 void preDisplayInit() {
-	//Set up peripheral bus clock
+										//Set up peripheral bus clock
 	OSCCONCLR = 0x180000;				//Peripheral bus clock scaling Max 10Mhz
 	OSCCONSET = 0x080000;				//1:1, 1:2, 1:4, 1:8	sysclk ti pbclk (bits 20-19)
 
-	//Set up output pins
+										//Set up output pins
 	AD1PCFG = 0xFFFF;
 	ODCE = 0x0;
 
-	//Output pins for display signals
+										//Output pins for display signals
 	ODCF = 0x0;
 	ODCG = 0x0;
 
-	//Display output control pins
+										//Display output control pins
 	TRISFCLR = 7 << 4;
 	TRISGCLR = 1 << 9;
 
-	//Display intput pins?
+										//Display intput pins?
 	TRISDSET = 1 << 8;
 
-	//Set up SPI as master
+										//Set up SPI as master
 	SPI2CON = 0;
 	SPI2BRG = 1 << 2;
 
 	SPI2STATCLR = 1 << 6;				//Clear SPIROV
 	SPI2CONSET = 0x8060;				//Turn on SPI, Set CKP = 1, MSTEN = 1
 }
+
+//Following 3 functions were imported from Lab 3 files and then modified
 
 /* Non-Maskable Interrupt; something bad likely happened, so hang */
 void _nmi_handler() {

@@ -998,6 +998,38 @@ void drawSprite(struct Sprite asset, struct Vec pos) {
 	}
 }
 
+void drawSquare(struct Vec start, struct Vec fin) {
+	int i, j;
+
+	if (start.x == fin.x) {
+		fin.x++;
+	}
+
+	if (start.y == fin.y) {
+		fin.y++;
+	}
+
+	if (start.x < 0) {
+		start.x = 0;
+	}
+	if (start.y < 0) {
+		start.y = 0;
+	}
+	if (fin.x > 127) {
+		fin.x = 127;
+	}
+	if (fin.y > 31) {
+		fin.y = 31;
+	}
+
+
+	for (i = start.y; i < fin.y; i++) {
+		for (j = start.x; j < fin.x; j++) {
+			canvas[i][j] = 1;
+		}
+	}
+}
+
 void printText(char* string, struct Vec pos) {
 
 	int i = 0;

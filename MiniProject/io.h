@@ -82,6 +82,7 @@ uint8_t spi(uint8_t data);
 void displayUpdate();
 void printText(char* string, struct Vec pos);
 void drawSprite(struct Sprite asset, struct Vec pos);
+void drawSquare(struct Vec start, struct Vec fin);
 
 void Iprint(int i, struct Vec pos);
 void Fprint(float f, struct Vec pos);

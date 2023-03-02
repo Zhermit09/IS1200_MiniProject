@@ -23,10 +23,19 @@ struct Pipe {
 
 };
 
+struct Ground {
+	double x;
+	double y;
+};
+
 struct Bird bird;
 struct Pipe pipes[5];
+struct Ground ground[2];
+
+struct Sprite pImage;
+struct Sprite gImage;
 
 void gameSetup();
 void game();
-void scoreCheck(int score);
+void scoreCheck();
 #endif // end of _GAME_
