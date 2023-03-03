@@ -11,8 +11,6 @@ void initLed() {
 void initHID() {
 	TRISDSET = 0x7f << 5;				//Switch and buttons 4-2 in
 	TRISFSET = 0x2;						//button 1
-
-
 }
 
 void initTimer() {
