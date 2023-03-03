@@ -298,7 +298,13 @@ void game() {
 			bird.y = 10;
 
 			bird.hit = 0;
+
 			bird.y_vel = 0;
+			bird.x_vel = 0;
+
+			GAP = 23;
+			PSPEED = 20.0;
+			oldScore = 0;
 
 			for (i = 0; i < 5; i++) {
 				pipes[i].x = 128 + i * (pWidth + SPACE);
@@ -311,6 +317,7 @@ void game() {
 			time = 0;
 			c = 0;
 			fps = 0;
+
 		}
 
 		draw();
