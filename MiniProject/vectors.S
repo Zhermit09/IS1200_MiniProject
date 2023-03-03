@@ -1,3 +1,4 @@
+#This file was taken from Lab 3, only enable_interrupts is our own function
 .macro movi reg, val
 	lui \reg, %hi(\val)
 	ori \reg, \reg, %lo(\val)
